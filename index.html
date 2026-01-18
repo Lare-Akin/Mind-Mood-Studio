@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laré's Mind and Mood Studio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        /* Prevent zoom on input focus in iOS */
+        input, textarea, select {
+            font-size: 16px !important;
+        }
+
+        /* Fullscreen container */
+        #app-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Background IMAGE with gradient overlay */
+        #background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0.85;
+            z-index: 0;
+            filter: brightness(0.8) contrast(1.1);
+        }
+
+        /* Image fallback */
+        #image-fallback {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0e1a, #1a1f30);
+            z-index: 0;
+        }
+
+        /* Gradient overlay for better text readability */
+        #gradient-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(0, 0, 0, 0.2) 0%,
+                rgba(0, 0, 0, 0.4) 50%,
+                rgba(0, 0, 0, 0.2) 100%
+            );
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Enhanced Hypnotic Spiral */
+        #spiral-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+            filter: blur(0.3px);
+        }
+
+        .spiral {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 160vmax;
+            height: 160vmax;
+            transform: translate(-50%, -50%);
+            background: 
+                radial-gradient(
+                    circle at center,
+                    rgba(120, 180, 255, 0.4) 0%,
+                    rgba(100, 160, 255, 0.6) 20%,
+                    rgba(80, 140, 255, 0.8) 40%,
+                    rgba(60, 120, 255, 1) 60%,
+                    rgba(80, 140, 255, 0.8) 80%,
+                    rgba(100, 160, 255, 0.6) 100%
+                ),
+                conic-gradient(
+                    from 0deg,
+                    rgba(120, 180, 255, 0.9),
+                    rgba(180, 220, 255, 0.7),
+                    rgba(255, 180, 220, 0.9),
+                    rgba(120, 180, 255, 0.9)
+                );
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+            mix-blend-mode: screen;
+            opacity: 0.6;
+            -webkit-animation: rotate 20s linear infinite;
+        }
+
+        .spiral-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 3px solid;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse-ring 4s ease-in-out infinite;
+            box-shadow: 
+                0 0 40px rgba(100, 180, 255, 0.5),
+                0 0 80px rgba(100, 180, 255, 0.3),
+                0 0 120px rgba(100, 180, 255, 0.1);
+            -webkit-animation: pulse-ring 4s ease-in-out infinite;
+        }
+
+        .spiral-ring:nth-child(2) {
+            width: 50vmin;
+            height: 50vmin;
+            animation-delay: 0.2s;
+            -webkit-animation-delay: 0.2s;
+            border-color: rgba(255, 150, 200, 0.6);
+        }
+
+        .spiral-ring:nth-child(3) {
+            width: 75vmin;
+            height: 75vmin;
+            animation-delay: 0.4s;
+            -webkit-animation-delay: 0.4s;
+            border-color: rgba(150, 255, 200, 0.6);
+        }
+
+        .spiral-ring:nth-child(4) {
+            width: 100vmin;
+            height: 100vmin;
+            animation-delay: 0.6s;
+            -webkit-animation-delay: 0.6s;
+            border-color: rgba(255, 255, 150, 0.6);
+        }
+
+        /* Centered Affirmation Text */
+        #affirmation-container {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            transform: translateY(-50%);
+            z-index: 3;
+            text-align: center;
+            padding: 0 5%;
+            pointer-events: none;
+        }
+
+        #affirmation-text {
+            font-size: 3.8rem;
+            font-weight: 300;
+            line-height: 1.3;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 
+                0 2px 10px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(100, 180, 255, 0.6),
+                0 0 40px rgba(100, 180, 255, 0.4);
+            opacity: 0;
+            animation: floatIn 1s ease-out forwards;
+            max-width: 1200px;
+            margin: 0 auto;
+            letter-spacing: 0.5px;
+            -webkit-animation: floatIn 1s ease-out forwards;
+        }
+
+        /* Floating Controls Toggle */
+        #controls-toggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: rgba(20, 25, 40, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid rgba(100, 180, 255, 0.3);
+            border-radius: 50%;
+            color: rgba(100, 180, 255, 0.9);
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #controls-toggle:hover {
+            background: rgba(30, 35, 50, 0.95);
+            border-color: rgba(100, 180, 255, 0.6);
+            color: rgba(100, 180, 255, 1);
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Floating Controls Panel */
+        #controls-panel {
+            position: fixed;
+            top: 0;
+            right: -380px;
+            width: 360px;
+            height: 100vh;
+            background: rgba(20, 25, 40, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(100, 180, 255, 0.2);
+            z-index: 99;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 60px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #controls-panel.open {
+            right: 0;
+        }
+
+        /* Controls Header */
+        .controls-header {
+            padding: 30px;
+            border-bottom: 1px solid rgba(100, 180, 255, 0.1);
+        }
+
+        .controls-header h2 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: rgba(100, 180, 255, 0.9);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .controls-header p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Controls Content */
+        .controls-content {
+            flex: 1;
+            padding: 0 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Control Group */
+        .control-group {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .control-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .control-group h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: rgba(100, 180, 255, 0.9);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: rgba(100, 180, 255, 0.15);
+            border: 1px solid rgba(100, 180, 255, 0.3);
+            border-radius: 10px;
+            color: rgba(100, 180, 255, 0.9);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        .btn:hover {
+            background: rgba(100, 180, 255, 0.25);
+            border-color: rgba(100, 180, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, rgba(100, 180, 255, 0.8), rgba(150, 200, 255, 0.9));
+            border: none;
+            color: white;
+            box-shadow: 0 4px 15px rgba(100, 180, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, rgba(120, 200, 255, 0.9), rgba(170, 220, 255, 1));
+            box-shadow: 0 6px 20px rgba(100, 180, 255, 0.4);
+        }
+
+        /* Affirmation Input Container */
+        .affirmation-input-container {
+            margin-bottom: 15px;
+        }
+
+        .affirmation-input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(100, 180, 255, 0.3);
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s;
+            min-height: 80px;
+        }
+
+        .affirmation-input:focus {
+            outline: none;
+            border-color: rgba(100, 180, 255, 0.6);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 2px rgba(100, 180, 255, 0.1);
+        }
+
+        .affirmation-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .word-counter {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: right;
+            margin-top: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .word-counter span {
+            font-weight: 600;
+        }
+
+        .word-counter .warning {
+            color: #ff6b6b;
+        }
+
+        .word-counter .good {
+            color: #51cf66;
+        }
+
+        /* Sliders */
+        .slider-container {
+            margin-bottom: 22px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .slider-header label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 500;
+        }
+
+        .slider-value {
+            font-size: 1rem;
+            color: rgba(100, 180, 255, 0.9);
+            font-weight: 600;
+            min-width: 50px;
+            text-align: right;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: rgba(100, 180, 255, 0.9);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(100, 180, 255, 0.5);
+            transition: all 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            background: rgba(120, 200, 255, 1);
+            box-shadow: 0 0 15px rgba(100, 180, 255, 0.7);
+        }
+
+        /* Color Picker */
+        .color-picker-container {
+            margin-bottom: 20px;
+        }
+
+        .color-picker-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 500;
+        }
+
+        .color-picker {
+            width: 100%;
+            height: 45px;
+            border: 2px solid rgba(100, 180, 255, 0.3);
+            border-radius: 10px;
+            background: transparent;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        /* Select Dropdown */
+        .select-container {
+            margin-bottom: 20px;
+        }
+
+        .select-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 500;
+        }
+
+        /* File Upload */
+        .file-upload-container {
+            margin-bottom: 20px;
+        }
+
+        .file-info {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Status Indicator */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(100, 180, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid rgba(100, 180, 255, 0.6);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: rgba(100, 180, 255, 0.8);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            -webkit-animation: pulse 2s infinite;
+        }
+
+        .status-text {
+            color: rgba(100, 180, 255, 0.9);
+            font-size: 0.95rem;
+        }
+
+        /* Image Controls */
+        .image-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .image-controls .btn {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        /* Session Controls at Bottom */
+        .session-controls-bottom {
+            margin-top: auto;
+            padding: 25px 0;
+            border-top: 1px solid rgba(100, 180, 255, 0.1);
+        }
+
+        .btn-large {
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .session-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 12px;
+            font-size: 0.9rem;
+            flex: 1;
+        }
+
+        /* Animation Keyframes */
+        @keyframes rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.05); }
+            100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
+        }
+
+        @-webkit-keyframes rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.05); }
+            100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
+        }
+
+        @keyframes pulse-ring {
+            0%, 100% { 
+                opacity: 0.4;
+                transform: translate(-50%, -50%) scale(0.95);
+            }
+            50% { 
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+        }
+
+        @-webkit-keyframes pulse-ring {
+            0%, 100% { 
+                opacity: 0.4;
+                transform: translate(-50%, -50%) scale(0.95);
+            }
+            50% { 
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+        }
+
+        @keyframes floatIn {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @-webkit-keyframes floatIn {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @-webkit-keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0e1a, #1a1f30);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: opacity 1s;
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(100, 180, 255, 0.2);
+            border-top: 4px solid rgba(100, 180, 255, 0.9);
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            -webkit-animation: spin 1.5s linear infinite;
+            margin-bottom: 25px;
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            color: rgba(100, 180, 255, 0.8);
+            letter-spacing: 2px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @-webkit-keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Custom Scrollbar */
+        .controls-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .controls-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        .controls-content::-webkit-scrollbar-thumb {
+            background: rgba(100, 180, 255, 0.4);
+            border-radius: 4px;
+        }
+        
+        .controls-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 180, 255, 0.6);
+        }
+
+        /* Hidden File Inputs */
+        .hidden-input {
+            display: none;
+        }
+
+        /* Ambient Music Notice */
+        .ambient-notice {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+            margin-top: 5px;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        /* Audio Play Button for iOS */
+        .ios-audio-play {
+            display: none;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #controls-panel {
+                width: 320px;
+                right: -320px;
+            }
+            
+            #affirmation-text {
+                font-size: 2.8rem;
+            }
+            
+            .spiral {
+                width: 140vmax;
+                height: 140vmax;
+            }
+            
+            .affirmation-input {
+                min-height: 100px;
+                font-size: 1rem;
+            }
+            
+            .word-counter {
+                font-size: 0.75rem;
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 2px;
+            }
+            
+            .btn-large {
+                padding: 18px;
+                font-size: 1.1rem;
+            }
+            
+            .btn-small {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+            
+            #controls-toggle {
+                top: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            /* iOS specific fixes */
+            @supports (-webkit-touch-callout: none) {
+                #app-container {
+                    height: -webkit-fill-available;
+                }
+                
+                .btn {
+                    min-height: 44px; /* Minimum touch target size for iOS */
+                }
+                
+                #controls-toggle {
+                    min-width: 44px;
+                    min-height: 44px;
+                }
+            }
+        }
+
+        @media (max-height: 700px) {
+            #affirmation-text {
+                font-size: 2.8rem;
+            }
+            
+            .controls-header {
+                padding: 20px;
+            }
+            
+            .controls-content {
+                padding: 0 20px;
+            }
+            
+            .affirmation-input {
+                min-height: 70px;
+            }
+            
+            .session-controls-bottom {
+                padding: 20px 0;
+            }
+            
+            .btn-large {
+                padding: 16px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Safari-specific fixes */
+        @media not all and (min-resolution:.001dpcm) { 
+            @supports (-webkit-appearance:none) {
+                .spiral {
+                    will-change: transform;
+                }
+                
+                #background-image {
+                    will-change: opacity;
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">MIND MOOD STUDIO</div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app-container">
+        <!-- Background Image -->
+        <img id="background-image" src="" alt="Relaxation Background" crossorigin="anonymous">
+        
+        <!-- Image fallback (for when no image is loaded) -->
+        <div id="image-fallback"></div>
+        
+        <!-- Gradient Overlay -->
+        <div id="gradient-overlay"></div>
+
+        <!-- Hypnotic Spiral -->
+        <div id="spiral-container">
+            <div class="spiral"></div>
+            <div class="spiral-ring"></div>
+            <div class="spiral-ring"></div>
+            <div class="spiral-ring"></div>
+        </div>
+
+        <!-- Centered Affirmation Text -->
+        <div id="affirmation-container">
+            <div id="affirmation-text">Breathe. Relax. Be Present.</div>
+        </div>
+
+        <!-- Controls Toggle Button -->
+        <button id="controls-toggle">
+            <i class="fas fa-sliders-h"></i>
+        </button>
+
+        <!-- Floating Controls Panel -->
+        <div id="controls-panel">
+            <!-- Header -->
+            <div class="controls-header">
+                <h2><i class="fas fa-cogs"></i> Your Space. Your Controls.</h2>
+                <p>Customise your relaxation experience</p>
+            </div>
+
+            <!-- Content -->
+            <div class="controls-content">
+                <!-- Image Controls -->
+                <div class="control-group">
+                    <h3><i class="fas fa-images"></i> Background Images</h3>
+                    <button id="load-images" class="btn">
+                        <i class="fas fa-upload"></i> Load Images
+                    </button>
+                    <button id="shuffle-images" class="btn">
+                        <i class="fas fa-random"></i> Shuffle Images
+                    </button>
+                    
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <label>Transition Speed</label>
+                            <span id="image-speed-value" class="slider-value">30s</span>
+                        </div>
+                        <input type="range" id="image-speed" class="slider" min="10" max="180" value="30">
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <label>Image Brightness</label>
+                            <span id="brightness-value" class="slider-value">80%</span>
+                        </div>
+                        <input type="range" id="brightness" class="slider" min="40" max="100" value="80">
+                    </div>
+                </div>
+
+                <!-- Affirmation Controls -->
+                <div class="control-group">
+                    <h3><i class="fas fa-quote-right"></i> Affirmations</h3>
+                    
+                    <div class="affirmation-input-container">
+                        <textarea id="affirmation-input" 
+                                  class="affirmation-input"
+                                  placeholder="Give yourself the word you need in this moment"
+                                  rows="3"></textarea>
+                        <div class="word-counter" id="word-counter">
+                            <span id="word-count">0</span> / 1 positive word
+                            <span id="char-count">0 characters</span>
+                        </div>
+                    </div>
+                    
+                    <button id="update-affirmation" class="btn">
+                        <i class="fas fa-check"></i> Update Affirmation
+                    </button>
+                    
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <label>Text Size</label>
+                            <span id="text-size-value" class="slider-value">Medium</span>
+                        </div>
+                        <input type="range" id="text-size" class="slider" min="2" max="6" value="3.8" step="0.2">
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <label>Text Opacity</label>
+                            <span id="text-opacity-value" class="slider-value">95%</span>
+                        </div>
+                        <input type="range" id="text-opacity" class="slider" min="40" max="100" value="95">
+                    </div>
+                    
+                    <div class="color-picker-container">
+                        <label>Text Color</label>
+                        <input type="color" id="text-color" class="color-picker" value="#ffffff">
+                    </div>
+                </div>
+
+                <!-- Spiral Controls -->
+                <div class="control-group">
+                    <h3><i class="fas fa-circle-notch"></i> Spiral</h3>
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <label>Rotation Speed</label>
+                            <span id="spiral-speed-value" class="slider-value">20s</span>
+                        </div>
+                        <input type="range" id="spiral-speed" class="slider" min="5" max="60" value="20">
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <label>Spiral Intensity</label>
+                            <span id="spiral-intensity-value" class="slider-value">60%</span>
+                        </div>
+                        <input type="range" id="spiral-intensity" class="slider" min="10" max="90" value="60">
+                    </div>
+                    
+                    <div class="color-picker-container">
+                        <label>Spiral Color</label>
+                        <input type="color" id="spiral-color" class="color-picker" value="#64b4ff">
+                    </div>
+                </div>
+
+                <!-- Sound Controls -->
+                <div class="control-group">
+                    <h3><i class="fas fa-music"></i> Sound</h3>
+                    <p class="ambient-notice">Load your own custom sound for complete personalisation</p>
+                    
+                    <button id="load-sound" class="btn">
+                        <i class="fas fa-file-audio"></i> Load Custom Sound
+                    </button>
+                    
+                    <!-- iOS Audio Play Button -->
+                    <button id="ios-play-sound" class="btn ios-audio-play" style="display: none;">
+                        <i class="fas fa-play"></i> Play Sound
+                    </button>
+                    
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <label>Volume</label>
+                            <span id="volume-value" class="slider-value">50%</span>
+                        </div>
+                        <input type="range" id="volume" class="slider" min="0" max="100" value="50">
+                    </div>
+                </div>
+
+                <!-- Status Indicator -->
+                <div class="control-group">
+                    <h3><i class="fas fa-info-circle"></i> Status</h3>
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <div class="status-text" id="status-text">Ready to begin</div>
+                    </div>
+                </div>
+
+                <!-- Session Controls at Bottom -->
+                <div class="session-controls-bottom">
+                    <button id="play-stop" class="btn btn-primary btn-large">
+                        <i class="fas fa-play"></i> Start Session
+                    </button>
+                    <div class="session-actions">
+                        <button id="reset-session" class="btn btn-small">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                        <button id="fullscreen" class="btn btn-small">
+                            <i class="fas fa-expand"></i> Fullscreen
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden File Inputs -->
+        <input type="file" id="image-input" class="hidden-input" accept="image/*" multiple>
+        <input type="file" id="sound-input" class="hidden-input" accept="audio/*">
+    </div>
+
+    <script>
+        // Check if iOS Safari
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        
+        // State Management
+        const state = {
+            images: [],
+            affirmations: ["OO"],
+            currentImageIndex: 0,
+            currentAffirmationIndex: 0,
+            isPlaying: false,
+            imageInterval: 30000,
+            spiralSpeed: 20,
+            spiralIntensity: 0.6,
+            spiralColor: '#64b4ff',
+            textSize: 3.8,
+            textOpacity: 0.95,
+            textColor: '#ffffff',
+            volume: 0.5,
+            customSound: null,
+            imageTimer: null,
+            shuffleMode: true,
+            imageBrightness: 0.8,
+            audioContext: null,
+            audioSource: null,
+            audioBuffer: null,
+            isAudioPlaying: false
+        };
+
+        // DOM Elements
+        const elements = {
+            // Main elements
+            loadingScreen: document.getElementById('loading-screen'),
+            backgroundImage: document.getElementById('background-image'),
+            imageFallback: document.getElementById('image-fallback'),
+            affirmationText: document.getElementById('affirmation-text'),
+            spiral: document.querySelector('.spiral'),
+            spiralRings: document.querySelectorAll('.spiral-ring'),
+            
+            // Controls
+            controlsToggle: document.getElementById('controls-toggle'),
+            controlsPanel: document.getElementById('controls-panel'),
+            playStop: document.getElementById('play-stop'),
+            statusText: document.getElementById('status-text'),
+            
+            // File inputs
+            imageInput: document.getElementById('image-input'),
+            soundInput: document.getElementById('sound-input'),
+            
+            // Buttons
+            loadImages: document.getElementById('load-images'),
+            updateAffirmationBtn: document.getElementById('update-affirmation'),
+            shuffleImages: document.getElementById('shuffle-images'),
+            loadSound: document.getElementById('load-sound'),
+            iosPlaySound: document.getElementById('ios-play-sound'),
+            resetSession: document.getElementById('reset-session'),
+            fullscreen: document.getElementById('fullscreen'),
+            
+            // Affirmation input
+            affirmationInput: document.getElementById('affirmation-input'),
+            wordCount: document.getElementById('word-count'),
+            charCount: document.getElementById('char-count'),
+            
+            // Sliders and values
+            imageSpeed: document.getElementById('image-speed'),
+            imageSpeedValue: document.getElementById('image-speed-value'),
+            brightness: document.getElementById('brightness'),
+            brightnessValue: document.getElementById('brightness-value'),
+            textSize: document.getElementById('text-size'),
+            textSizeValue: document.getElementById('text-size-value'),
+            textOpacity: document.getElementById('text-opacity'),
+            textOpacityValue: document.getElementById('text-opacity-value'),
+            textColor: document.getElementById('text-color'),
+            spiralSpeed: document.getElementById('spiral-speed'),
+            spiralSpeedValue: document.getElementById('spiral-speed-value'),
+            spiralIntensity: document.getElementById('spiral-intensity'),
+            spiralIntensityValue: document.getElementById('spiral-intensity-value'),
+            spiralColor: document.getElementById('spiral-color'),
+            volume: document.getElementById('volume'),
+            volumeValue: document.getElementById('volume-value')
+        };
+
+        // Initialize the application
+        function init() {
+            // Safari/iOS specific initialization
+            if (isIOS) {
+                setupIOSCompatibility();
+            }
+            
+            // Hide loading screen
+            setTimeout(() => {
+                elements.loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    elements.loadingScreen.style.display = 'none';
+                    updateAffirmation();
+                    updateSpiralStyle();
+                    updateTextStyle();
+                    updateWordCount(); // Initialize word counter
+                    
+                    // Initialize Web Audio API for iOS
+                    if (isIOS) {
+                        initWebAudio();
+                    }
+                }, 1000);
+            }, 1500);
+
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Initialize audio volume
+            updateAudioVolume();
+            
+            // Initialize image brightness
+            updateImageBrightness();
+        }
+
+        // Setup iOS compatibility
+        function setupIOSCompatibility() {
+            // Add iOS-specific CSS classes
+            document.body.classList.add('ios-device');
+            
+            // Fix for iOS viewport height
+            function setViewportHeight() {
+                let vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--vh', `${vh}px`);
+            }
+            
+            setViewportHeight();
+            window.addEventListener('resize', setViewportHeight);
+            window.addEventListener('orientationchange', setViewportHeight);
+        }
+
+        // Initialize Web Audio API for iOS
+        function initWebAudio() {
+            try {
+                // Create Audio Context for iOS
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) {
+                    state.audioContext = new AudioContext();
+                    // Resume audio context on user interaction (iOS requirement)
+                    document.addEventListener('click', () => {
+                        if (state.audioContext && state.audioContext.state === 'suspended') {
+                            state.audioContext.resume();
+                        }
+                    }, { once: true });
+                }
+            } catch (e) {
+                console.log('Web Audio API not supported:', e);
+            }
+        }
+
+        // Setup all event listeners
+        function setupEventListeners() {
+            // Controls panel toggle
+            elements.controlsToggle.addEventListener('click', toggleControlsPanel);
+            elements.controlsToggle.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                toggleControlsPanel();
+            }, { passive: false });
+            
+            // Close controls panel when clicking outside
+            document.addEventListener('click', (e) => {
+                if (elements.controlsPanel.classList.contains('open') &&
+                    !elements.controlsPanel.contains(e.target) &&
+                    e.target !== elements.controlsToggle) {
+                    closeControlsPanel();
+                }
+            });
+
+            // Prevent closing when clicking inside controls panel
+            elements.controlsPanel.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            // Play/Stop button
+            elements.playStop.addEventListener('click', togglePlayback);
+            elements.playStop.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                togglePlayback();
+            }, { passive: false });
+
+            // File loading buttons
+            elements.loadImages.addEventListener('click', () => elements.imageInput.click());
+            elements.loadImages.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                elements.imageInput.click();
+            }, { passive: false });
+            
+            elements.loadSound.addEventListener('click', () => elements.soundInput.click());
+            elements.loadSound.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                elements.soundInput.click();
+            }, { passive: false });
+
+            // iOS Play Sound button
+            if (elements.iosPlaySound) {
+                elements.iosPlaySound.addEventListener('click', playCustomSound);
+                elements.iosPlaySound.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    playCustomSound();
+                }, { passive: false });
+            }
+
+            // File input changes
+            elements.imageInput.addEventListener('change', handleImageUpload);
+            elements.soundInput.addEventListener('change', handleSoundUpload);
+
+            // Word counter for affirmation input
+            elements.affirmationInput.addEventListener('input', updateWordCount);
+            
+            // Allow normal typing including spaces
+            elements.affirmationInput.addEventListener('keydown', (e) => {
+                // Allow all normal keyboard input including spaces
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                }
+                
+                // Allow Enter key to update affirmation (but Shift+Enter for new line)
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    updateAffirmationFromInput();
+                }
+            });
+
+            // Update affirmation button
+            elements.updateAffirmationBtn.addEventListener('click', updateAffirmationFromInput);
+            elements.updateAffirmationBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                updateAffirmationFromInput();
+            }, { passive: false });
+
+            // Shuffle button
+            elements.shuffleImages.addEventListener('click', shuffleImages);
+            elements.shuffleImages.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                shuffleImages();
+            }, { passive: false });
+
+            // Reset and fullscreen buttons
+            elements.resetSession.addEventListener('click', resetSession);
+            elements.resetSession.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                resetSession();
+            }, { passive: false });
+            
+            elements.fullscreen.addEventListener('click', toggleFullscreen);
+            elements.fullscreen.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                toggleFullscreen();
+            }, { passive: false });
+
+            // Slider inputs
+            elements.imageSpeed.addEventListener('input', (e) => {
+                state.imageInterval = parseInt(e.target.value) * 1000;
+                elements.imageSpeedValue.textContent = e.target.value + 's';
+                if (state.isPlaying) restartTimers();
+            });
+
+            elements.brightness.addEventListener('input', (e) => {
+                state.imageBrightness = parseInt(e.target.value) / 100;
+                elements.brightnessValue.textContent = e.target.value + '%';
+                updateImageBrightness();
+            });
+
+            elements.textSize.addEventListener('input', (e) => {
+                const sizes = ['Small', 'Medium', 'Large', 'X-Large', 'XX-Large'];
+                state.textSize = parseFloat(e.target.value);
+                const sizeIndex = Math.min(Math.floor((state.textSize - 2) / 1), 4);
+                elements.textSizeValue.textContent = sizes[sizeIndex];
+                updateTextStyle();
+            });
+
+            elements.textOpacity.addEventListener('input', (e) => {
+                state.textOpacity = parseInt(e.target.value) / 100;
+                elements.textOpacityValue.textContent = e.target.value + '%';
+                updateTextStyle();
+            });
+
+            elements.textColor.addEventListener('input', (e) => {
+                state.textColor = e.target.value;
+                updateTextStyle();
+            });
+
+            elements.spiralSpeed.addEventListener('input', (e) => {
+                state.spiralSpeed = parseInt(e.target.value);
+                elements.spiralSpeedValue.textContent = e.target.value + 's';
+                elements.spiral.style.animationDuration = `${state.spiralSpeed}s`;
+                elements.spiral.style.WebkitAnimationDuration = `${state.spiralSpeed}s`;
+            });
+
+            elements.spiralIntensity.addEventListener('input', (e) => {
+                state.spiralIntensity = parseInt(e.target.value) / 100;
+                elements.spiralIntensityValue.textContent = e.target.value + '%';
+                updateSpiralStyle();
+            });
+
+            elements.spiralColor.addEventListener('input', (e) => {
+                state.spiralColor = e.target.value;
+                updateSpiralStyle();
+            });
+
+            elements.volume.addEventListener('input', (e) => {
+                state.volume = parseInt(e.target.value) / 100;
+                elements.volumeValue.textContent = e.target.value + '%';
+                updateAudioVolume();
+            });
+
+            // Keyboard shortcuts (only for non-touch devices)
+            if (!isIOS) {
+                document.addEventListener('keydown', (e) => {
+                    switch(e.key) {
+                        case ' ':
+                            e.preventDefault();
+                            togglePlayback();
+                            break;
+                        case 'Escape':
+                            closeControlsPanel();
+                            if (document.fullscreenElement) {
+                                document.exitFullscreen();
+                            }
+                            break;
+                        case 'c':
+                        case 'C':
+                            toggleControlsPanel();
+                            break;
+                        case 'ArrowRight':
+                            nextImage();
+                            break;
+                        case 'ArrowLeft':
+                            previousImage();
+                            break;
+                        case 's':
+                        case 'S':
+                            shuffleImages();
+                            break;
+                        case 'f':
+                        case 'F':
+                            toggleFullscreen();
+                            break;
+                        case 'm':
+                        case 'M':
+                            toggleAmbienceMute();
+                            break;
+                    }
+                });
+            }
+
+            // iOS specific touch events for image navigation
+            if (isIOS) {
+                let touchStartX = 0;
+                let touchStartY = 0;
+                
+                document.addEventListener('touchstart', (e) => {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }, { passive: true });
+                
+                document.addEventListener('touchend', (e) => {
+                    if (!elements.controlsPanel.classList.contains('open')) {
+                        const touchEndX = e.changedTouches[0].clientX;
+                        const touchEndY = e.changedTouches[0].clientY;
+                        const diffX = touchStartX - touchEndX;
+                        const diffY = touchStartY - touchEndY;
+                        
+                        // Only consider horizontal swipes (min 50px difference)
+                        if (Math.abs(diffX) > 50 && Math.abs(diffY) < 50) {
+                            if (diffX > 0) {
+                                // Swipe left
+                                nextImage();
+                            } else {
+                                // Swipe right
+                                previousImage();
+                            }
+                        }
+                    }
+                }, { passive: true });
+            }
+
+            // Handle page visibility changes for audio
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden && state.customSound && !state.customSound.paused) {
+                    state.customSound.pause();
+                } else if (!document.hidden && state.isAudioPlaying && state.customSound) {
+                    playCustomSound();
+                }
+            });
+        }
+
+        // Toggle ambience mute
+        function toggleAmbienceMute() {
+            if (state.customSound) {
+                state.customSound.muted = !state.customSound.muted;
+                elements.statusText.textContent = state.customSound.muted ? 'Sound muted' : 'Sound unmuted';
+            }
+        }
+
+        // Update word count
+        function updateWordCount() {
+            const text = elements.affirmationInput.value.trim();
+            // Count words properly, handling multiple spaces
+            const words = text === '' ? 0 : text.split(/\s+/).filter(word => word.length > 0).length;
+            const chars = text.length;
+            
+            elements.wordCount.textContent = words;
+            elements.charCount.textContent = `${chars} characters`;
+            
+            // Add warning class if over limit
+            const counter = document.getElementById('word-counter');
+            if (words > 12) {
+                counter.classList.add('warning');
+                counter.classList.remove('good');
+                elements.updateAffirmationBtn.disabled = true;
+                elements.updateAffirmationBtn.style.opacity = '0.5';
+                elements.updateAffirmationBtn.style.cursor = 'not-allowed';
+            } else if (words > 0) {
+                counter.classList.remove('warning');
+                counter.classList.add('good');
+                elements.updateAffirmationBtn.disabled = false;
+                elements.updateAffirmationBtn.style.opacity = '1';
+                elements.updateAffirmationBtn.style.cursor = 'pointer';
+            } else {
+                counter.classList.remove('warning', 'good');
+                elements.updateAffirmationBtn.disabled = false;
+                elements.updateAffirmationBtn.style.opacity = '1';
+                elements.updateAffirmationBtn.style.cursor = 'pointer';
+            }
+        }
+
+        // Update affirmation from input
+        function updateAffirmationFromInput() {
+            const text = elements.affirmationInput.value.trim();
+            // Count words properly
+            const words = text === '' ? 0 : text.split(/\s+/).filter(word => word.length > 0).length;
+            
+            if (words > 12) {
+                alert('Please limit your affirmation to 12 words or less.');
+                return;
+            }
+            
+            if (text) {
+                state.affirmations = [text]; // Replace with user's input
+                state.currentAffirmationIndex = 0;
+                updateAffirmation();
+                
+                // Visual feedback
+                elements.updateAffirmationBtn.innerHTML = '<i class="fas fa-check"></i> Updated!';
+                setTimeout(() => {
+                    elements.updateAffirmationBtn.innerHTML = '<i class="fas fa-check"></i> Update Affirmation';
+                }, 1500);
+                
+                elements.statusText.textContent = 'Affirmation updated successfully';
+            }
+        }
+
+        // Toggle controls panel
+        function toggleControlsPanel() {
+            elements.controlsPanel.classList.toggle('open');
+            // Update toggle button icon
+            const icon = elements.controlsToggle.querySelector('i');
+            if (elements.controlsPanel.classList.contains('open')) {
+                icon.className = 'fas fa-times';
+                elements.controlsToggle.style.transform = 'rotate(90deg)';
+                elements.controlsToggle.style.zIndex = '101'; // Ensure it's above panel
+            } else {
+                icon.className = 'fas fa-sliders-h';
+                elements.controlsToggle.style.transform = 'rotate(0)';
+                elements.controlsToggle.style.zIndex = '100';
+            }
+        }
+
+        // Close controls panel
+        function closeControlsPanel() {
+            elements.controlsPanel.classList.remove('open');
+            const icon = elements.controlsToggle.querySelector('i');
+            icon.className = 'fas fa-sliders-h';
+            elements.controlsToggle.style.transform = 'rotate(0)';
+        }
+
+        // Handle image upload
+        function handleImageUpload(event) {
+            const files = Array.from(event.target.files);
+            state.images = [];
+            
+            files.forEach((file, index) => {
+                const url = URL.createObjectURL(file);
+                state.images.push(url);
+                
+                // If this is the first image, display it
+                if (index === 0) {
+                    elements.backgroundImage.src = url;
+                    elements.imageFallback.style.display = 'none';
+                    state.currentImageIndex = 0;
+                    elements.statusText.textContent = `Loaded ${files.length} images`;
+                }
+            });
+        }
+
+        // Handle sound upload
+        function handleSoundUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Stop any currently playing sound
+                if (state.customSound) {
+                    state.customSound.pause();
+                    state.customSound.currentTime = 0;
+                }
+                
+                // Create new audio element
+                const url = URL.createObjectURL(file);
+                state.customSound = new Audio(url);
+                state.customSound.loop = true;
+                state.customSound.volume = state.volume;
+                
+                // iOS requires user interaction to play audio
+                if (isIOS) {
+                    elements.statusText.textContent = `Loaded: ${file.name}. Tap "Play Sound" to start.`;
+                    elements.iosPlaySound.style.display = 'flex';
+                } else {
+                    // Play the custom sound automatically on non-iOS devices
+                    playCustomSound();
+                    elements.statusText.textContent = `Playing: ${file.name}`;
+                }
+            }
+        }
+
+        // Update image brightness
+        function updateImageBrightness() {
+            elements.backgroundImage.style.filter = `brightness(${state.imageBrightness}) contrast(1.1)`;
+        }
+
+        // Update spiral style
+        function updateSpiralStyle() {
+            const rgb = hexToRgb(state.spiralColor);
+            const intensity = state.spiralIntensity;
+            
+            elements.spiral.style.background = 
+                `radial-gradient(
+                    circle at center,
+                    rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.4}) 0%,
+                    rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.6}) 20%,
+                    rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.8}) 40%,
+                    rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity}) 60%,
+                    rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.8}) 80%,
+                    rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.6}) 100%
+                ),
+                conic-gradient(
+                    from 0deg,
+                    rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.9}),
+                    rgba(180, 220, 255, ${intensity * 0.7}),
+                    rgba(255, 180, 220, ${intensity * 0.9}),
+                    rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.9})
+                )`;
+            
+            elements.spiral.style.opacity = intensity;
+            elements.spiralRings.forEach(ring => {
+                ring.style.borderColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.6})`;
+            });
+        }
+
+        // Update text style
+        function updateTextStyle() {
+            elements.affirmationText.style.fontSize = `${state.textSize}rem`;
+            elements.affirmationText.style.opacity = state.textOpacity;
+            elements.affirmationText.style.color = state.textColor;
+        }
+
+        // Convert hex to RGB
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : { r: 100, g: 180, b: 255 };
+        }
+
+        // Update current affirmation
+        function updateAffirmation() {
+            if (state.affirmations.length > 0) {
+                const affirmation = state.affirmations[state.currentAffirmationIndex];
+                elements.affirmationText.textContent = affirmation;
+            }
+        }
+
+        // Toggle playback
+        function togglePlayback() {
+            state.isPlaying = !state.isPlaying;
+            
+            if (state.isPlaying) {
+                // Start playback
+                elements.playStop.innerHTML = '<i class="fas fa-pause"></i> Pause Session';
+                elements.playStop.classList.add('btn-primary');
+                elements.statusText.textContent = 'Session active - Auto shuffle enabled';
+                
+                // Auto-shuffle if enabled
+                if (state.shuffleMode) {
+                    shuffleImages();
+                }
+                
+                // Start timers
+                restartTimers();
+            } else {
+                // Stop playback
+                elements.playStop.innerHTML = '<i class="fas fa-play"></i> Start Session';
+                elements.playStop.classList.remove('btn-primary');
+                elements.statusText.textContent = 'Session paused';
+                
+                // Stop timers
+                stopTimers();
+            }
+        }
+
+        // Play custom sound
+        function playCustomSound() {
+            if (state.customSound) {
+                // iOS requires AudioContext to be resumed on user gesture
+                if (isIOS && state.audioContext && state.audioContext.state === 'suspended') {
+                    state.audioContext.resume();
+                }
+                
+                state.customSound.volume = state.volume;
+                
+                // Handle iOS autoplay restrictions
+                const playPromise = state.customSound.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.catch(e => {
+                        console.log("Audio play failed:", e);
+                        if (isIOS) {
+                            elements.statusText.textContent = "Tap the 'Play Sound' button to start audio";
+                        } else {
+                            elements.statusText.textContent = "Click to start sound";
+                        }
+                        // iOS shows the play button
+                        if (isIOS) {
+                            elements.iosPlaySound.style.display = 'flex';
+                        }
+                    }).then(() => {
+                        state.isAudioPlaying = true;
+                        elements.iosPlaySound.style.display = 'none';
+                        elements.statusText.textContent = 'Sound playing';
+                    });
+                }
+            }
+        }
+
+        // Shuffle images
+        function shuffleImages() {
+            if (state.images.length === 0) return;
+            
+            // Shuffle images
+            for (let i = state.images.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [state.images[i], state.images[j]] = [state.images[j], state.images[i]];
+            }
+            
+            // Reset index
+            state.currentImageIndex = 0;
+            
+            // Update display
+            showCurrentImage();
+            
+            elements.statusText.textContent = `Shuffled ${state.images.length} images`;
+        }
+
+        // Show current image
+        function showCurrentImage() {
+            if (state.images.length === 0) return;
+            
+            // Fade out current image
+            elements.backgroundImage.style.opacity = '0.3';
+            
+            setTimeout(() => {
+                elements.backgroundImage.src = state.images[state.currentImageIndex];
+                elements.imageFallback.style.display = 'none';
+                elements.backgroundImage.style.opacity = '0.85';
+            }, 500);
+        }
+
+        // Move to next image
+        function nextImage() {
+            if (state.images.length === 0) return;
+            
+            state.currentImageIndex = (state.currentImageIndex + 1) % state.images.length;
+            showCurrentImage();
+        }
+
+        // Move to previous image
+        function previousImage() {
+            if (state.images.length === 0) return;
+            
+            state.currentImageIndex = (state.currentImageIndex - 1 + state.images.length) % state.images.length;
+            showCurrentImage();
+        }
+
+        // Move to next content (for auto-timer)
+        function nextContent() {
+            if (state.images.length === 0) return;
+            
+            // Calculate next image index
+            state.currentImageIndex = (state.currentImageIndex + 1) % state.images.length;
+            
+            // Show next image
+            showCurrentImage();
+        }
+
+        // Restart timers
+        function restartTimers() {
+            stopTimers();
+            
+            if (state.images.length > 1) {
+                state.imageTimer = setInterval(nextContent, state.imageInterval);
+            }
+        }
+
+        // Stop timers
+        function stopTimers() {
+            if (state.imageTimer) clearInterval(state.imageTimer);
+        }
+
+        // Update audio volume
+        function updateAudioVolume() {
+            if (state.customSound) {
+                state.customSound.volume = state.volume;
+            }
+            
+            if (state.isAudioPlaying) {
+                elements.statusText.textContent = `Volume set to ${Math.round(state.volume * 100)}%`;
+            }
+        }
+
+        // Reset session
+        function resetSession() {
+            state.currentImageIndex = 0;
+            state.currentAffirmationIndex = 0;
+            
+            if (state.images.length > 0) {
+                showCurrentImage();
+            }
+            
+            updateAffirmation();
+            
+            if (state.isPlaying) {
+                restartTimers();
+            }
+            
+            elements.statusText.textContent = 'Session reset to beginning';
+        }
+
+        // Toggle fullscreen
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                const elem = document.documentElement;
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) { // Safari
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { // IE11
+                    elem.msRequestFullscreen();
+                }
+                elements.statusText.textContent = 'Entered fullscreen mode';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { // Safari
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE11
+                    document.msExitFullscreen();
+                }
+                elements.statusText.textContent = 'Exited fullscreen mode';
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+        
+        // iOS specific initialization after page load
+        if (isIOS) {
+            window.addEventListener('load', function() {
+                // Fix for iOS 100vh issue
+                document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+                
+                // Force layout recalculation for Safari
+                setTimeout(() => {
+                    document.body.style.display = 'block';
+                }, 100);
+            });
+        }
+    </script>
+</body>
+</html>
