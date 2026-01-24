@@ -19,13 +19,6 @@
             overflow: hidden;
             height: 100vh;
             width: 100vw;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-        }
-
-        /* Prevent zoom on input focus in iOS */
-        input, textarea, select {
-            font-size: 16px !important;
         }
 
         /* Fullscreen container */
@@ -119,7 +112,6 @@
             animation: rotate 20s linear infinite;
             mix-blend-mode: screen;
             opacity: 0.6;
-            -webkit-animation: rotate 20s linear infinite;
         }
 
         .spiral-ring {
@@ -129,19 +121,17 @@
             border: 3px solid;
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            animation: pulse-ring 4s ease-in-out infinite;
+            animation: pulse-ring var(--breath-speed, 8s) ease-in-out infinite;
             box-shadow: 
                 0 0 40px rgba(100, 180, 255, 0.5),
                 0 0 80px rgba(100, 180, 255, 0.3),
                 0 0 120px rgba(100, 180, 255, 0.1);
-            -webkit-animation: pulse-ring 4s ease-in-out infinite;
         }
 
         .spiral-ring:nth-child(2) {
             width: 50vmin;
             height: 50vmin;
             animation-delay: 0.2s;
-            -webkit-animation-delay: 0.2s;
             border-color: rgba(255, 150, 200, 0.6);
         }
 
@@ -149,7 +139,6 @@
             width: 75vmin;
             height: 75vmin;
             animation-delay: 0.4s;
-            -webkit-animation-delay: 0.4s;
             border-color: rgba(150, 255, 200, 0.6);
         }
 
@@ -157,7 +146,6 @@
             width: 100vmin;
             height: 100vmin;
             animation-delay: 0.6s;
-            -webkit-animation-delay: 0.6s;
             border-color: rgba(255, 255, 150, 0.6);
         }
 
@@ -188,7 +176,6 @@
             max-width: 1200px;
             margin: 0 auto;
             letter-spacing: 0.5px;
-            -webkit-animation: floatIn 1s ease-out forwards;
         }
 
         /* Floating Controls Toggle */
@@ -200,7 +187,6 @@
             height: 60px;
             background: rgba(20, 25, 40, 0.85);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border: 2px solid rgba(100, 180, 255, 0.3);
             border-radius: 50%;
             color: rgba(100, 180, 255, 0.9);
@@ -212,7 +198,6 @@
             font-size: 1.8rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            -webkit-tap-highlight-color: transparent;
         }
 
         #controls-toggle:hover {
@@ -232,7 +217,6 @@
             height: 100vh;
             background: rgba(20, 25, 40, 0.95);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-left: 1px solid rgba(100, 180, 255, 0.2);
             z-index: 99;
             transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -240,7 +224,6 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            -webkit-overflow-scrolling: touch;
         }
 
         #controls-panel.open {
@@ -275,7 +258,6 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            -webkit-overflow-scrolling: touch;
         }
 
         /* Control Group */
@@ -317,8 +299,6 @@
             justify-content: center;
             gap: 10px;
             margin-bottom: 12px;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
         }
 
         .btn:hover {
@@ -464,7 +444,7 @@
             padding: 5px;
         }
 
-        /* Select Dropdown */
+        /* Select Dropdown - FIXED */
         .select-container {
             margin-bottom: 20px;
         }
@@ -475,6 +455,39 @@
             font-size: 1rem;
             color: rgba(255, 255, 255, 0.85);
             font-weight: 500;
+        }
+
+        .select-dropdown {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(100, 180, 255, 0.3);
+            border-radius: 10px;
+            color: #ffffff !important; /* Force white text */
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        .select-dropdown option {
+            background-color: rgba(20, 25, 40, 0.95);
+            color: #ffffff;
+            padding: 10px;
+        }
+
+        .select-dropdown:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(100, 180, 255, 0.4);
+        }
+
+        .select-dropdown:focus {
+            outline: none;
+            border-color: rgba(100, 180, 255, 0.6);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 2px rgba(100, 180, 255, 0.1);
         }
 
         /* File Upload */
@@ -508,7 +521,6 @@
             background: rgba(100, 180, 255, 0.8);
             border-radius: 50%;
             animation: pulse 2s infinite;
-            -webkit-animation: pulse 2s infinite;
         }
 
         .status-text {
@@ -560,24 +572,7 @@
             100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
         }
 
-        @-webkit-keyframes rotate {
-            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
-            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.05); }
-            100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
-        }
-
         @keyframes pulse-ring {
-            0%, 100% { 
-                opacity: 0.4;
-                transform: translate(-50%, -50%) scale(0.95);
-            }
-            50% { 
-                opacity: 0.8;
-                transform: translate(-50%, -50%) scale(1.05);
-            }
-        }
-
-        @-webkit-keyframes pulse-ring {
             0%, 100% { 
                 opacity: 0.4;
                 transform: translate(-50%, -50%) scale(0.95);
@@ -593,17 +588,7 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        @-webkit-keyframes floatIn {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
         @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        @-webkit-keyframes pulse {
             0%, 100% { opacity: 0.6; }
             50% { opacity: 1; }
         }
@@ -631,7 +616,6 @@
             border-top: 4px solid rgba(100, 180, 255, 0.9);
             border-radius: 50%;
             animation: spin 1.5s linear infinite;
-            -webkit-animation: spin 1.5s linear infinite;
             margin-bottom: 25px;
         }
 
@@ -642,11 +626,6 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @-webkit-keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
@@ -683,13 +662,6 @@
             margin-top: 5px;
             text-align: center;
             padding: 0 10px;
-        }
-
-        /* Audio Play Button for iOS */
-        .ios-audio-play {
-            display: none;
-            margin-top: 10px;
-            width: 100%;
         }
 
         /* Responsive Design */
@@ -737,22 +709,6 @@
                 height: 50px;
                 font-size: 1.5rem;
             }
-            
-            /* iOS specific fixes */
-            @supports (-webkit-touch-callout: none) {
-                #app-container {
-                    height: -webkit-fill-available;
-                }
-                
-                .btn {
-                    min-height: 44px; /* Minimum touch target size for iOS */
-                }
-                
-                #controls-toggle {
-                    min-width: 44px;
-                    min-height: 44px;
-                }
-            }
         }
 
         @media (max-height: 700px) {
@@ -782,17 +738,10 @@
             }
         }
 
-        /* Safari-specific fixes */
-        @media not all and (min-resolution:.001dpcm) { 
-            @supports (-webkit-appearance:none) {
-                .spiral {
-                    will-change: transform;
-                }
-                
-                #background-image {
-                    will-change: opacity;
-                }
-            }
+        /* Fix for dropdown text visibility */
+        select.select-dropdown * {
+            background-color: rgba(20, 25, 40, 1) !important;
+            color: white !important;
         }
     </style>
 </head>
@@ -800,13 +749,13 @@
     <!-- Loading Screen -->
     <div id="loading-screen">
         <div class="loading-spinner"></div>
-        <div class="loading-text">MIND MOOD STUDIO</div>
+        <div class="loading-text">ZENFLOW MEDITATION</div>
     </div>
 
     <!-- Main App Container -->
     <div id="app-container">
         <!-- Background Image -->
-        <img id="background-image" src="" alt="Relaxation Background" crossorigin="anonymous">
+        <img id="background-image" src="" alt="Relaxation Background">
         
         <!-- Image fallback (for when no image is loaded) -->
         <div id="image-fallback"></div>
@@ -921,12 +870,45 @@
                         <input type="range" id="spiral-speed" class="slider" min="5" max="60" value="20">
                     </div>
                     
+                    <!-- NEW: Breathing Pace Slider -->
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <label>Breathing Pace</label>
+                            <span id="breath-speed-value" class="slider-value">8s</span>
+                        </div>
+                        <input
+                            type="range"
+                            id="breath-speed"
+                            class="slider"
+                            min="4"
+                            max="14"
+                            value="8"
+                            step="1"
+                        >
+                    </div>
+                    
                     <div class="slider-container">
                         <div class="slider-header">
                             <label>Spiral Intensity</label>
                             <span id="spiral-intensity-value" class="slider-value">60%</span>
                         </div>
                         <input type="range" id="spiral-intensity" class="slider" min="10" max="90" value="60">
+                    </div>
+                    
+                    <!-- NEW: Spiral Opacity Slider -->
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <label>Spiral Opacity</label>
+                            <span id="spiral-opacity-value" class="slider-value">60%</span>
+                        </div>
+                        <input
+                            type="range"
+                            id="spiral-opacity"
+                            class="slider"
+                            min="10"
+                            max="80"
+                            value="60"
+                        >
                     </div>
                     
                     <div class="color-picker-container">
@@ -937,17 +919,25 @@
 
                 <!-- Sound Controls -->
                 <div class="control-group">
-                    <h3><i class="fas fa-music"></i> Sound</h3>
-                    <p class="ambient-notice">Load your own custom sound for complete personalisation</p>
+                    <h3><i class="fas fa-music"></i> Ambience</h3>
+                    <p class="ambient-notice">You can also close your eyes and enjoy the sound only if you want </p>
                     
                     <button id="load-sound" class="btn">
                         <i class="fas fa-file-audio"></i> Load Custom Sound
                     </button>
                     
-                    <!-- iOS Audio Play Button -->
-                    <button id="ios-play-sound" class="btn ios-audio-play" style="display: none;">
-                        <i class="fas fa-play"></i> Play Sound
-                    </button>
+                    <div class="select-container">
+                        <label>Ambience Type</label>
+                        <select id="ambience-type" class="select-dropdown">
+                            <option value="">No Sound</option>
+                            <option value="rain">Gentle Rain</option>
+                            <option value="ocean">Ocean Waves</option>
+                            <option value="forest">Forest Ambience</option>
+                            <option value="meditation">Meditation Bells</option>
+                            <option value="white">White Noise</option>
+                            <option value="custom">Custom Sound</option>
+                        </select>
+                    </div>
                     
                     <div class="slider-container">
                         <div class="slider-header">
@@ -989,34 +979,47 @@
         <input type="file" id="sound-input" class="hidden-input" accept="audio/*">
     </div>
 
+    <!-- Audio Elements -->
+    <audio id="rain-audio" loop>
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-rain-loop-1249.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="ocean-audio" loop>
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-ocean-waves-loop-1245.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="forest-audio" loop>
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-forest-ambience-1612.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="meditation-audio" loop>
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-meditation-bells-1716.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="white-audio" loop>
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-white-noise-loop-1490.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        // Check if iOS Safari
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        
         // State Management
         const state = {
             images: [],
-            affirmations: ["OO"],
+            affirmations: ["🌸"],
             currentImageIndex: 0,
             currentAffirmationIndex: 0,
             isPlaying: false,
             imageInterval: 30000,
             spiralSpeed: 20,
+            breathSpeed: 8, // NEW: Added breathing pace
             spiralIntensity: 0.6,
+            spiralOpacity: 0.6, // NEW: Added spiral opacity
             spiralColor: '#64b4ff',
             textSize: 3.8,
             textOpacity: 0.95,
             textColor: '#ffffff',
+            ambience: '',
             volume: 0.5,
             customSound: null,
             imageTimer: null,
             shuffleMode: true,
             imageBrightness: 0.8,
-            audioContext: null,
-            audioSource: null,
-            audioBuffer: null,
-            isAudioPlaying: false
+            ambiencePlaying: false
         };
 
         // DOM Elements
@@ -1044,7 +1047,6 @@
             updateAffirmationBtn: document.getElementById('update-affirmation'),
             shuffleImages: document.getElementById('shuffle-images'),
             loadSound: document.getElementById('load-sound'),
-            iosPlaySound: document.getElementById('ios-play-sound'),
             resetSession: document.getElementById('reset-session'),
             fullscreen: document.getElementById('fullscreen'),
             
@@ -1065,20 +1067,29 @@
             textColor: document.getElementById('text-color'),
             spiralSpeed: document.getElementById('spiral-speed'),
             spiralSpeedValue: document.getElementById('spiral-speed-value'),
+            breathSpeed: document.getElementById('breath-speed'), // NEW
+            breathSpeedValue: document.getElementById('breath-speed-value'), // NEW
             spiralIntensity: document.getElementById('spiral-intensity'),
             spiralIntensityValue: document.getElementById('spiral-intensity-value'),
+            spiralOpacity: document.getElementById('spiral-opacity'), // NEW
+            spiralOpacityValue: document.getElementById('spiral-opacity-value'), // NEW
             spiralColor: document.getElementById('spiral-color'),
             volume: document.getElementById('volume'),
-            volumeValue: document.getElementById('volume-value')
+            volumeValue: document.getElementById('volume-value'),
+            
+            // Selectors
+            ambienceType: document.getElementById('ambience-type'),
+            
+            // Audio elements
+            rainAudio: document.getElementById('rain-audio'),
+            oceanAudio: document.getElementById('ocean-audio'),
+            forestAudio: document.getElementById('forest-audio'),
+            meditationAudio: document.getElementById('meditation-audio'),
+            whiteAudio: document.getElementById('white-audio')
         };
 
         // Initialize the application
         function init() {
-            // Safari/iOS specific initialization
-            if (isIOS) {
-                setupIOSCompatibility();
-            }
-            
             // Hide loading screen
             setTimeout(() => {
                 elements.loadingScreen.style.opacity = '0';
@@ -1088,11 +1099,6 @@
                     updateSpiralStyle();
                     updateTextStyle();
                     updateWordCount(); // Initialize word counter
-                    
-                    // Initialize Web Audio API for iOS
-                    if (isIOS) {
-                        initWebAudio();
-                    }
                 }, 1000);
             }, 1500);
 
@@ -1104,53 +1110,32 @@
             
             // Initialize image brightness
             updateImageBrightness();
+            
+            // Preload audio files
+            preloadAudio();
         }
 
-        // Setup iOS compatibility
-        function setupIOSCompatibility() {
-            // Add iOS-specific CSS classes
-            document.body.classList.add('ios-device');
+        // Preload audio files
+        function preloadAudio() {
+            const audioElements = [elements.rainAudio, elements.oceanAudio, elements.forestAudio, 
+                                  elements.meditationAudio, elements.whiteAudio];
             
-            // Fix for iOS viewport height
-            function setViewportHeight() {
-                let vh = window.innerHeight * 0.01;
-                document.documentElement.style.setProperty('--vh', `${vh}px`);
-            }
-            
-            setViewportHeight();
-            window.addEventListener('resize', setViewportHeight);
-            window.addEventListener('orientationchange', setViewportHeight);
-        }
-
-        // Initialize Web Audio API for iOS
-        function initWebAudio() {
-            try {
-                // Create Audio Context for iOS
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (AudioContext) {
-                    state.audioContext = new AudioContext();
-                    // Resume audio context on user interaction (iOS requirement)
-                    document.addEventListener('click', () => {
-                        if (state.audioContext && state.audioContext.state === 'suspended') {
-                            state.audioContext.resume();
-                        }
-                    }, { once: true });
-                }
-            } catch (e) {
-                console.log('Web Audio API not supported:', e);
-            }
+            audioElements.forEach(audio => {
+                audio.load();
+                // Set initial volume
+                audio.volume = state.volume;
+            });
         }
 
         // Setup all event listeners
         function setupEventListeners() {
-            // Controls panel toggle
+            // Controls panel toggle - FIXED: Make entire button clickable
             elements.controlsToggle.addEventListener('click', toggleControlsPanel);
-            elements.controlsToggle.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                toggleControlsPanel();
-            }, { passive: false });
+            elements.controlsToggle.addEventListener('mousedown', (e) => {
+                e.stopPropagation(); // Prevent event from bubbling up
+            });
             
-            // Close controls panel when clicking outside
+            // Close controls panel when clicking outside - FIXED
             document.addEventListener('click', (e) => {
                 if (elements.controlsPanel.classList.contains('open') &&
                     !elements.controlsPanel.contains(e.target) &&
@@ -1166,33 +1151,11 @@
 
             // Play/Stop button
             elements.playStop.addEventListener('click', togglePlayback);
-            elements.playStop.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                togglePlayback();
-            }, { passive: false });
 
             // File loading buttons
             elements.loadImages.addEventListener('click', () => elements.imageInput.click());
-            elements.loadImages.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                elements.imageInput.click();
-            }, { passive: false });
-            
             elements.loadSound.addEventListener('click', () => elements.soundInput.click());
-            elements.loadSound.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                elements.soundInput.click();
-            }, { passive: false });
-
-            // iOS Play Sound button
-            if (elements.iosPlaySound) {
-                elements.iosPlaySound.addEventListener('click', playCustomSound);
-                elements.iosPlaySound.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    playCustomSound();
-                }, { passive: false });
-            }
-
+            
             // File input changes
             elements.imageInput.addEventListener('change', handleImageUpload);
             elements.soundInput.addEventListener('change', handleSoundUpload);
@@ -1216,30 +1179,13 @@
 
             // Update affirmation button
             elements.updateAffirmationBtn.addEventListener('click', updateAffirmationFromInput);
-            elements.updateAffirmationBtn.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                updateAffirmationFromInput();
-            }, { passive: false });
 
             // Shuffle button
             elements.shuffleImages.addEventListener('click', shuffleImages);
-            elements.shuffleImages.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                shuffleImages();
-            }, { passive: false });
 
             // Reset and fullscreen buttons
             elements.resetSession.addEventListener('click', resetSession);
-            elements.resetSession.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                resetSession();
-            }, { passive: false });
-            
             elements.fullscreen.addEventListener('click', toggleFullscreen);
-            elements.fullscreen.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                toggleFullscreen();
-            }, { passive: false });
 
             // Slider inputs
             elements.imageSpeed.addEventListener('input', (e) => {
@@ -1277,13 +1223,30 @@
                 state.spiralSpeed = parseInt(e.target.value);
                 elements.spiralSpeedValue.textContent = e.target.value + 's';
                 elements.spiral.style.animationDuration = `${state.spiralSpeed}s`;
-                elements.spiral.style.WebkitAnimationDuration = `${state.spiralSpeed}s`;
+            });
+
+            // NEW: Breathing pace event listener
+            elements.breathSpeed.addEventListener('input', (e) => {
+                state.breathSpeed = parseInt(e.target.value);
+                elements.breathSpeedValue.textContent = state.breathSpeed + 's';
+
+                document.documentElement.style.setProperty(
+                    '--breath-speed',
+                    `${state.breathSpeed}s`
+                );
             });
 
             elements.spiralIntensity.addEventListener('input', (e) => {
                 state.spiralIntensity = parseInt(e.target.value) / 100;
                 elements.spiralIntensityValue.textContent = e.target.value + '%';
                 updateSpiralStyle();
+            });
+
+            // NEW: Spiral opacity event listener
+            elements.spiralOpacity.addEventListener('input', (e) => {
+                state.spiralOpacity = parseInt(e.target.value) / 100;
+                elements.spiralOpacityValue.textContent = e.target.value + '%';
+                elements.spiral.style.opacity = state.spiralOpacity;
             });
 
             elements.spiralColor.addEventListener('input', (e) => {
@@ -1297,93 +1260,67 @@
                 updateAudioVolume();
             });
 
-            // Keyboard shortcuts (only for non-touch devices)
-            if (!isIOS) {
-                document.addEventListener('keydown', (e) => {
-                    switch(e.key) {
-                        case ' ':
-                            e.preventDefault();
-                            togglePlayback();
-                            break;
-                        case 'Escape':
-                            closeControlsPanel();
-                            if (document.fullscreenElement) {
-                                document.exitFullscreen();
-                            }
-                            break;
-                        case 'c':
-                        case 'C':
-                            toggleControlsPanel();
-                            break;
-                        case 'ArrowRight':
-                            nextImage();
-                            break;
-                        case 'ArrowLeft':
-                            previousImage();
-                            break;
-                        case 's':
-                        case 'S':
-                            shuffleImages();
-                            break;
-                        case 'f':
-                        case 'F':
-                            toggleFullscreen();
-                            break;
-                        case 'm':
-                        case 'M':
-                            toggleAmbienceMute();
-                            break;
-                    }
-                });
-            }
+            // Ambience type selection - FIXED
+            elements.ambienceType.addEventListener('change', (e) => {
+                state.ambience = e.target.value;
+                if (state.ambience === 'custom' && !state.customSound) {
+                    elements.statusText.textContent = 'Please load a custom sound first';
+                    return;
+                }
+                playAmbience();
+            });
 
-            // iOS specific touch events for image navigation
-            if (isIOS) {
-                let touchStartX = 0;
-                let touchStartY = 0;
-                
-                document.addEventListener('touchstart', (e) => {
-                    touchStartX = e.touches[0].clientX;
-                    touchStartY = e.touches[0].clientY;
-                }, { passive: true });
-                
-                document.addEventListener('touchend', (e) => {
-                    if (!elements.controlsPanel.classList.contains('open')) {
-                        const touchEndX = e.changedTouches[0].clientX;
-                        const touchEndY = e.changedTouches[0].clientY;
-                        const diffX = touchStartX - touchEndX;
-                        const diffY = touchStartY - touchEndY;
-                        
-                        // Only consider horizontal swipes (min 50px difference)
-                        if (Math.abs(diffX) > 50 && Math.abs(diffY) < 50) {
-                            if (diffX > 0) {
-                                // Swipe left
-                                nextImage();
-                            } else {
-                                // Swipe right
-                                previousImage();
-                            }
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                switch(e.key) {
+                    case ' ':
+                        e.preventDefault();
+                        togglePlayback();
+                        break;
+                    case 'Escape':
+                        closeControlsPanel();
+                        if (document.fullscreenElement) {
+                            document.exitFullscreen();
                         }
-                    }
-                }, { passive: true });
-            }
-
-            // Handle page visibility changes for audio
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden && state.customSound && !state.customSound.paused) {
-                    state.customSound.pause();
-                } else if (!document.hidden && state.isAudioPlaying && state.customSound) {
-                    playCustomSound();
+                        break;
+                    case 'c':
+                    case 'C':
+                        toggleControlsPanel();
+                        break;
+                    case 'ArrowRight':
+                        nextImage();
+                        break;
+                    case 'ArrowLeft':
+                        previousImage();
+                        break;
+                    case 's':
+                    case 'S':
+                        shuffleImages();
+                        break;
+                    case 'f':
+                    case 'F':
+                        toggleFullscreen();
+                        break;
+                    case 'm':
+                    case 'M':
+                        toggleAmbienceMute();
+                        break;
                 }
             });
         }
 
         // Toggle ambience mute
         function toggleAmbienceMute() {
-            if (state.customSound) {
-                state.customSound.muted = !state.customSound.muted;
-                elements.statusText.textContent = state.customSound.muted ? 'Sound muted' : 'Sound unmuted';
-            }
+            const audioElements = [elements.rainAudio, elements.oceanAudio, elements.forestAudio, 
+                                  elements.meditationAudio, elements.whiteAudio, state.customSound];
+            
+            audioElements.forEach(audio => {
+                if (audio) {
+                    audio.muted = !audio.muted;
+                }
+            });
+            
+            elements.statusText.textContent = audioElements[0]?.muted ? 'Ambience muted' : 'Ambience unmuted';
         }
 
         // Update word count
@@ -1444,7 +1381,7 @@
             }
         }
 
-        // Toggle controls panel
+        // Toggle controls panel - FIXED
         function toggleControlsPanel() {
             elements.controlsPanel.classList.toggle('open');
             // Update toggle button icon
@@ -1487,31 +1424,23 @@
             });
         }
 
-        // Handle sound upload
+        // Handle sound upload - FIXED
         function handleSoundUpload(event) {
             const file = event.target.files[0];
             if (file) {
-                // Stop any currently playing sound
-                if (state.customSound) {
-                    state.customSound.pause();
-                    state.customSound.currentTime = 0;
-                }
-                
-                // Create new audio element
                 const url = URL.createObjectURL(file);
                 state.customSound = new Audio(url);
                 state.customSound.loop = true;
                 state.customSound.volume = state.volume;
                 
-                // iOS requires user interaction to play audio
-                if (isIOS) {
-                    elements.statusText.textContent = `Loaded: ${file.name}. Tap "Play Sound" to start.`;
-                    elements.iosPlaySound.style.display = 'flex';
-                } else {
-                    // Play the custom sound automatically on non-iOS devices
-                    playCustomSound();
-                    elements.statusText.textContent = `Playing: ${file.name}`;
-                }
+                // Update dropdown to custom
+                elements.ambienceType.value = 'custom';
+                state.ambience = 'custom';
+                
+                // Play the custom sound
+                playAmbience();
+                
+                elements.statusText.textContent = `Loaded sound: ${file.name}`;
             }
         }
 
@@ -1543,7 +1472,7 @@
                     rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.9})
                 )`;
             
-            elements.spiral.style.opacity = intensity;
+            elements.spiral.style.opacity = state.spiralOpacity;
             elements.spiralRings.forEach(ring => {
                 ring.style.borderColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.6})`;
             });
@@ -1599,40 +1528,6 @@
                 
                 // Stop timers
                 stopTimers();
-            }
-        }
-
-        // Play custom sound
-        function playCustomSound() {
-            if (state.customSound) {
-                // iOS requires AudioContext to be resumed on user gesture
-                if (isIOS && state.audioContext && state.audioContext.state === 'suspended') {
-                    state.audioContext.resume();
-                }
-                
-                state.customSound.volume = state.volume;
-                
-                // Handle iOS autoplay restrictions
-                const playPromise = state.customSound.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise.catch(e => {
-                        console.log("Audio play failed:", e);
-                        if (isIOS) {
-                            elements.statusText.textContent = "Tap the 'Play Sound' button to start audio";
-                        } else {
-                            elements.statusText.textContent = "Click to start sound";
-                        }
-                        // iOS shows the play button
-                        if (isIOS) {
-                            elements.iosPlaySound.style.display = 'flex';
-                        }
-                    }).then(() => {
-                        state.isAudioPlaying = true;
-                        elements.iosPlaySound.style.display = 'none';
-                        elements.statusText.textContent = 'Sound playing';
-                    });
-                }
             }
         }
 
@@ -1710,13 +1605,60 @@
             if (state.imageTimer) clearInterval(state.imageTimer);
         }
 
-        // Update audio volume
-        function updateAudioVolume() {
-            if (state.customSound) {
-                state.customSound.volume = state.volume;
+        // Play ambience sound - FIXED
+        function playAmbience() {
+            // Stop all audio
+            const audioElements = [elements.rainAudio, elements.oceanAudio, elements.forestAudio, 
+                                  elements.meditationAudio, elements.whiteAudio, state.customSound];
+            
+            audioElements.forEach(audio => {
+                if (audio) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+            });
+            
+            // Play selected audio
+            let audioToPlay = null;
+            switch(state.ambience) {
+                case 'rain': audioToPlay = elements.rainAudio; break;
+                case 'ocean': audioToPlay = elements.oceanAudio; break;
+                case 'forest': audioToPlay = elements.forestAudio; break;
+                case 'meditation': audioToPlay = elements.meditationAudio; break;
+                case 'white': audioToPlay = elements.whiteAudio; break;
+                case 'custom': audioToPlay = state.customSound; break;
+                default: return; // No sound selected
             }
             
-            if (state.isAudioPlaying) {
+            if (audioToPlay) {
+                audioToPlay.volume = state.volume;
+                audioToPlay.play().catch(e => {
+                    console.log("Audio play failed:", e);
+                    elements.statusText.textContent = "Audio failed to play. Click the sound to start it.";
+                    // Add click to play handler
+                    audioToPlay.oncanplaythrough = () => {
+                        audioToPlay.play();
+                    };
+                });
+                state.ambiencePlaying = true;
+                elements.statusText.textContent = `Playing ${state.ambience} ambience`;
+            } else if (state.ambience === 'custom') {
+                elements.statusText.textContent = 'Please load a custom sound first';
+            }
+        }
+
+        // Update audio volume - FIXED
+        function updateAudioVolume() {
+            const audioElements = [elements.rainAudio, elements.oceanAudio, elements.forestAudio, 
+                                  elements.meditationAudio, elements.whiteAudio, state.customSound];
+            
+            audioElements.forEach(audio => {
+                if (audio) {
+                    audio.volume = state.volume;
+                }
+            });
+            
+            if (state.ambiencePlaying) {
                 elements.statusText.textContent = `Volume set to ${Math.round(state.volume * 100)}%`;
             }
         }
@@ -1742,42 +1684,20 @@
         // Toggle fullscreen
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
-                const elem = document.documentElement;
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.webkitRequestFullscreen) { // Safari
-                    elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) { // IE11
-                    elem.msRequestFullscreen();
-                }
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
                 elements.statusText.textContent = 'Entered fullscreen mode';
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) { // Safari
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) { // IE11
-                    document.msExitFullscreen();
+                    elements.statusText.textContent = 'Exited fullscreen mode';
                 }
-                elements.statusText.textContent = 'Exited fullscreen mode';
             }
         }
 
         // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
-        
-        // iOS specific initialization after page load
-        if (isIOS) {
-            window.addEventListener('load', function() {
-                // Fix for iOS 100vh issue
-                document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-                
-                // Force layout recalculation for Safari
-                setTimeout(() => {
-                    document.body.style.display = 'block';
-                }, 100);
-            });
-        }
     </script>
 </body>
 </html>
